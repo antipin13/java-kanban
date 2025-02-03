@@ -1,6 +1,6 @@
 package main;
 
-import taskmanager.TaskManager;
+import manager.TaskManager;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
