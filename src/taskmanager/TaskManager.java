@@ -1,9 +1,15 @@
+package taskmanager;
+
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+
 import java.util.HashMap;
 
 public class TaskManager {
-    HashMap<Integer, Task> tasks;
-    HashMap<Integer, Subtask> subtasks;
-    HashMap<Integer, Epic> epics;
+    public HashMap<Integer, Task> tasks;
+    public HashMap<Integer, Subtask> subtasks;
+    public HashMap<Integer, Epic> epics;
     private static int id;
 
     public TaskManager() {
@@ -71,21 +77,21 @@ public class TaskManager {
 
     public void createTask (Task task) {
         id = id + 1;
-        task.id = id;
+        task.setId(id);
         tasks.put(task.getId(), task);
         System.out.println("Создана задача " + task.getName() + " с идентификатором " + id);
     }
 
     public void createSubtask (Subtask subtask) {
         id = id + 1;
-        subtask.id = id;
+        subtask.setId(id);
         subtasks.put(subtask.getId(), subtask);
         System.out.println("Создана подзадача " + subtask.getName() + " с идентификатором " + id);
     }
 
     public void createEpic (Epic epic) {
         id = id + 1;
-        epic.id = id;
+        epic.setId(id);
         epics.put(epic.getId(), epic);
         System.out.println("Создан эпик " + epic.getName() + " с идентификатором " + id);
     }

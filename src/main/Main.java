@@ -1,4 +1,10 @@
-import java.util.HashMap;
+package main;
+
+import taskmanager.TaskManager;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 public class Main {
 
