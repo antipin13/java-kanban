@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TaskManager taskManager = new TaskManager();
+        /*TaskManager taskManager = new TaskManager();
 
         Task task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
         Task task2 = new Task("убраться в комнате", "протереть пыль", Status.NEW);
@@ -63,7 +63,7 @@ public class Main {
         System.out.println();
 
         taskManager.deleteEpic(7);
-        taskManager.getEpics();
+        taskManager.getEpics();*/
 
     }
 }
