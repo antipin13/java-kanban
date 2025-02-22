@@ -59,7 +59,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void immutabilityOfTaskWhenAddInManager() {
+    void immutabilityOfTask() {
         Task task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
         manager.createTask(task1);
 

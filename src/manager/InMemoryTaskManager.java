@@ -3,10 +3,7 @@ package manager;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
     public HashMap<Integer, Task> tasks;
@@ -88,7 +85,7 @@ public class InMemoryTaskManager implements TaskManager {
         id = id + 1;
         task.setId(id);
         tasks.put(task.getId(), task);
-        System.out.println("Создана задача - " + task.getName() + " с идентификатором: " + id);
+        System.out.printf("Создана задача - %s с идентификатором: %d%n", task.getName(), id);
     }
 
     @Override
@@ -96,7 +93,7 @@ public class InMemoryTaskManager implements TaskManager {
         id = id + 1;
         subtask.setId(id);
         subtasks.put(subtask.getId(), subtask);
-        System.out.println("Создана подзадача " + subtask.getName() + " с идентификатором " + id);
+        System.out.printf("Создана задача - %s с идентификатором: %d%n", subtask.getName(), id);
     }
 
     @Override
@@ -104,7 +101,7 @@ public class InMemoryTaskManager implements TaskManager {
         id = id + 1;
         epic.setId(id);
         epics.put(epic.getId(), epic);
-        System.out.println("Создан эпик " + epic.getName() + " с идентификатором " + id);
+        System.out.printf("Создана задача - %s с идентификатором: %d%n", epic.getName(), id);
     }
 
     @Override

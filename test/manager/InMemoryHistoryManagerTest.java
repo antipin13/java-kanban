@@ -13,7 +13,7 @@ class InMemoryHistoryManagerTest {
     private HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Test
-    void addTaskInHistory() {
+    void addTask() {
         Task task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
         manager.createTask(task1);
         historyManager.add(task1);
@@ -23,7 +23,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void historyManagerStoresOnly10Tasks() {
+    void storeOnly10Tasks() {
         Task task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
         manager.createTask(task1);
         for (int i = 0; i < 12; i++) {
@@ -35,7 +35,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void historyManagerDeleteFirstTask() {
+    void deleteFirstTask() {
         Task task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
         manager.createTask(task1);
 
@@ -52,7 +52,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void historyManagerStorePreviosVersionOfTask() {
+    void storePreviosVersionOfTask() {
         Task task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
         manager.createTask(task1);
         historyManager.add(task1);
