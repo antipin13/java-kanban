@@ -5,7 +5,6 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.HashMap;
-import java.util.List;
 
 public interface TaskManager {
     HashMap<Integer, Task> getTasks();
