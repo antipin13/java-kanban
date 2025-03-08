@@ -156,5 +156,4 @@ class InMemoryTaskManagerTest {
 
         assertNull(manager.getSubtaskOfId(subtask1.getId()), "Подзадача не удалилалсь вместе с эпиком");
     }
-
 }

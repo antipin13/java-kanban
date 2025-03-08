@@ -79,7 +79,7 @@ class InMemoryHistoryManagerTest {
         historyManager.remove(task2.getId());
         history = historyManager.getHistory();
 
-        assertEquals(2, history.size(), "Задача не удалена");
-        assertFalse(history.contains(task2), "Удалена не та задача");
+        assertEquals(2, history.size(), "Задача с ID 2 не удалена");
+        assertFalse(history.contains(task2), "Удалена задача с ID не равным 2");
     }
 }
