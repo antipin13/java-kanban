@@ -135,4 +135,26 @@ class InMemoryTaskManagerTest {
         manager.deleteEpic(epic1.getId());
         assertEquals(0, manager.getEpics().size());
     }
+
+    @Test
+    void deleteAllSubtaskInEpic() {
+        Epic epic1 = new Epic("покупка машины", "нужна машина");
+        manager.createEpic(epic1);
+
+        Subtask subtask1 = new Subtask("выбор машины", "просмотр харатекристик", Status.NEW);
+        manager.createSubtask(subtask1);
+
+        Subtask subtask2 = new Subtask("выбор машины", "просмотр харатекристик", Status.IN_PROGRESS);
+        manager.createSubtask(subtask2);
+
+        epic1.addSubtaskInEpic(subtask1);
+        epic1.addSubtaskInEpic(subtask2);
+
+        assertEquals(2, epic1.getEpic().size(), "Подзадачи не добавлены в эпик");
+
+        manager.deleteEpic(epic1.getId());
+
+        assertNull(manager.getSubtaskOfId(subtask1.getId()), "Подзадача не удалилалсь вместе с эпиком");
+    }
+
 }
