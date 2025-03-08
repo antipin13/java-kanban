@@ -32,7 +32,7 @@ class InMemoryHistoryManagerTest {
 
         manager.createTask(task2);
         historyManager.add(task2);
-        historyManager.getHistory();
+        history = historyManager.getHistory();
 
         assertEquals(2, history.size(), "task2 не добавлена в историю просмотров");
 
