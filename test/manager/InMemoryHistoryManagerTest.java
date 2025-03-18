@@ -1,69 +1,85 @@
 package manager;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Status;
 import tasks.Task;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
-    private TaskManager manager = Managers.getDefault();
-    private HistoryManager historyManager = Managers.getDefaultHistory();
+    private TaskManager manager;
+    private HistoryManager historyManager;
+    private Task task1;
+    private Task task2;
+
+    @BeforeEach
+    void beforeEach() {
+        manager = Managers.getDefault();
+        historyManager = Managers.getDefaultHistory();
+        task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
+        task2 = new Task("убраться в комнате", "протереть пыль", Status.NEW);
+    }
 
     @Test
     void addTask() {
-        Task task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
         manager.createTask(task1);
         historyManager.add(task1);
         List<Task> history = historyManager.getHistory();
 
         assertNotNull(history, "История просмотров пустая");
-    }
 
-    @Test
-    void storeOnly10Tasks() {
-        Task task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
-        manager.createTask(task1);
-        for (int i = 0; i < 12; i++) {
-            historyManager.add(task1);
-        }
-
-        List<Task> history = historyManager.getHistory();
-        assertEquals(10, history.size(), "Перебор задач");
-    }
-
-    @Test
-    void deleteFirstTask() {
-        Task task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
-        manager.createTask(task1);
-
-        Task task2 = new Task("убраться в комнате", "протереть пыль", Status.NEW);
         manager.createTask(task2);
+        historyManager.add(task2);
+        history = historyManager.getHistory();
+
+        assertEquals(2, history.size(), "task2 не добавлена в историю просмотров");
 
         historyManager.add(task1);
-        for (int i = 0; i < 10; i++) {
-            historyManager.add(task2);
-        }
+        historyManager.getHistory();
 
-        List<Task> history = historyManager.getHistory();
-        assertEquals(task2, history.get(0), "Задачи удаляются не с первой добавленной");
+        assertEquals(2, history.size(), "Количество задач в истории не изменилось");
     }
 
     @Test
-    void storePreviosVersionOfTask() {
-        Task task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
+    void getHistory() {
+        assertTrue(historyManager.getHistory().isEmpty(), "История не пустая");
+
+        Task task3 = new Task("Сделать уроки", "решить математику", Status.DONE);
+
         manager.createTask(task1);
+        manager.createTask(task2);
+        manager.createTask(task3);
         historyManager.add(task1);
+        historyManager.add(task2);
+        historyManager.add(task3);
 
         List<Task> history = historyManager.getHistory();
 
-        Task task2 = new Task("убраться в комнате", "протереть пыль", Status.NEW);
-        task2.setId(1);
-        manager.updateTask(task2);
-
-        assertTrue(task1.equals(history.get(0)), "Задача изменилась");
+        assertEquals(task3, history.get(2), "Третья задача не в конце");
     }
 
+    @Test
+    void remove() {
+        Task task3 = new Task("Сделать уроки", "решить математику", Status.DONE);
+
+        manager.createTask(task1);
+        historyManager.add(task1);
+
+        manager.createTask(task2);
+        historyManager.add(task2);
+
+        manager.createTask(task3);
+        historyManager.add(task3);
+
+        List<Task> history = historyManager.getHistory();
+        assertEquals(3, history.size(), "В истории не 3 задачи");
+
+        historyManager.remove(task2.getId());
+        history = historyManager.getHistory();
+
+        assertEquals(2, history.size(), "Задача с ID 2 не удалена");
+        assertFalse(history.contains(task2), "Удалена задача с ID не равным 2");
+    }
 }

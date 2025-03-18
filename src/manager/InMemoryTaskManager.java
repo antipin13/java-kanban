@@ -6,12 +6,14 @@ import tasks.Task;
 import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
+    private HistoryManager historyManager;
     public HashMap<Integer, Task> tasks;
     public HashMap<Integer, Subtask> subtasks;
     public HashMap<Integer, Epic> epics;
     private static int id;
 
-    public InMemoryTaskManager() {
+    public InMemoryTaskManager(HistoryManager historyManager) {
+        this.historyManager = historyManager;
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epics = new HashMap<>();
@@ -46,7 +48,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public HashMap<Integer, Epic> clearEpics() {
-        epics.clear();
+        for (Epic epic : epics.values()) {
+            deleteEpic(epic.getId());
+        }
         return epics;
     }
 
@@ -130,9 +134,11 @@ public class InMemoryTaskManager implements TaskManager {
         for (Integer id : tasks.keySet()) {
             if (id == idOfTask) {
                 idForDelete = idOfTask;
+                break;
             }
         }
         tasks.remove(idForDelete);
+        historyManager.remove(idForDelete);
     }
 
     @Override
@@ -141,9 +147,11 @@ public class InMemoryTaskManager implements TaskManager {
         for (Integer id : subtasks.keySet()) {
             if (id == idOfSubtask) {
                 idForDelete = idOfSubtask;
+                break;
             }
         }
         subtasks.remove(idForDelete);
+        historyManager.remove(idForDelete);
     }
 
     @Override
@@ -152,9 +160,15 @@ public class InMemoryTaskManager implements TaskManager {
         for (Integer id : epics.keySet()) {
             if (id == idOfEpic) {
                 idForDelete = idOfEpic;
+                break;
             }
         }
+
+        for (Subtask subtask : epics.get(idForDelete).getEpic().values()) {
+            deleteSubtask(subtask.getId());
+        }
         epics.remove(idForDelete);
+        historyManager.remove(idForDelete);
     }
 }
 

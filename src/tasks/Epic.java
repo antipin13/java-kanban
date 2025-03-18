@@ -45,8 +45,7 @@ public class Epic extends Task {
         return epic;
     }
 
-    public void addSubtaskInEpic (Subtask subtask) {
+    public void addSubtaskInEpic(Subtask subtask) {
         epic.put(subtask.getId(), subtask);
     }
 }
-
