@@ -1,5 +1,7 @@
 package tasks;
 
+import manager.KindOfTask;
+
 import java.util.HashMap;
 
 public class Epic extends Task {
@@ -45,7 +47,14 @@ public class Epic extends Task {
         return epic;
     }
 
-    public void addSubtaskInEpic(Subtask subtask) {
-        epic.put(subtask.getId(), subtask);
+    public void addSubtaskInEpic(Epic epic, Subtask subtask) {
+        epic.getEpic().put(subtask.getId(), subtask);
+        subtask.setEpicId(epic.getId());
+    }
+
+    public String toString(Epic epic) {
+        String template = String.format("%d,%s,%s,%s,%s,%s", epic.getId(), KindOfTask.EPIC, epic.getName(),
+                epic.getStatus(), epic.getDescription());
+        return template;
     }
 }

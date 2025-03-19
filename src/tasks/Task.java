@@ -17,7 +17,6 @@ public class Task {
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
-        this.id = hashCode();
     }
 
     @Override
@@ -63,10 +62,5 @@ public class Task {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "ID задачи - " + id;
     }
 }

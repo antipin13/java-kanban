@@ -1,0 +1,4 @@
+id,type,name,status,description,epic
+1,TASK,Сделать уроки,NEW,решить математику
+2,TASK,Сделать уроки,NEW,решить русский язык
+3,EPIC,эпик 1,NEW,нужна машина

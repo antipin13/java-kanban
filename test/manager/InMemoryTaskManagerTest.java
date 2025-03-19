@@ -147,8 +147,8 @@ class InMemoryTaskManagerTest {
         Subtask subtask2 = new Subtask("выбор машины", "просмотр харатекристик", Status.IN_PROGRESS);
         manager.createSubtask(subtask2);
 
-        epic1.addSubtaskInEpic(subtask1);
-        epic1.addSubtaskInEpic(subtask2);
+        epic1.addSubtaskInEpic(epic1, subtask1);
+        epic1.addSubtaskInEpic(epic1, subtask2);
 
         assertEquals(2, epic1.getEpic().size(), "Подзадачи не добавлены в эпик");
 
