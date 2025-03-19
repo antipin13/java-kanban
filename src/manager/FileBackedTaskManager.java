@@ -178,6 +178,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static void main(String[] args) throws IOException {
         File file = new File("C:\\Users\\mihail\\IdeaProjects\\java-kanban\\src\\Tasksfile.csv");
-        FileBackedTaskManager NewFileBackedTaskManager = FileBackedTaskManager.loadFromFile(file);
+        FileBackedTaskManager newFileBackedTaskManager = FileBackedTaskManager.loadFromFile(file);
     }
 }
