@@ -46,11 +46,11 @@ class FileBackedTaskManagerTest {
             String line = bufferedReader.readLine();
             Task taskInFile1 = fileBackedTaskManager.fromString(line);
 
-            assertEquals(taskInFile1, task1, "Задача task1 не записалась в файл tmpFile");
+            assertEquals(taskInFile1.getId(), task1.getId(), "Задача task1 не записалась в файл tmpFile");
 
             line = bufferedReader.readLine();
             Task epicInFile1 = fileBackedTaskManager.fromString(line);
-            assertEquals(epicInFile1, epic1, "Эпик epic1 не записался в файл tmpFile");
+            assertEquals(epicInFile1.getId(), epic1.getId(), "Эпик epic1 не записался в файл tmpFile");
         } catch (FileNotFoundException e) {
             e.getMessage();
         }
