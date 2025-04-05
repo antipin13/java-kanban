@@ -16,7 +16,7 @@ class EpicTest {
 
         Epic epic1 = new Epic("покупка машины", "нужна машина");
         manager.createEpic(epic1);
-        epic1.addSubtaskInEpic(subtask1);
+        epic1.addSubtaskInEpic(epic1, subtask1);
 
         assertEquals(1, epic1.getEpic().size(), "Подзадача не добавлена");
     }
@@ -31,8 +31,8 @@ class EpicTest {
         Epic epic1 = new Epic("покупка машины", "нужна машина");
         manager.createEpic(epic1);
 
-        epic1.addSubtaskInEpic(subtask1);
-        epic1.addSubtaskInEpic(subtask2);
+        epic1.addSubtaskInEpic(epic1, subtask1);
+        epic1.addSubtaskInEpic(epic1, subtask2);
 
         assertEquals(Status.NEW, epic1.getStatus(), "Статус рассчитан неверно");
 
