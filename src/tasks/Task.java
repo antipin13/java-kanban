@@ -1,5 +1,7 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -7,11 +9,15 @@ public class Task {
     String description;
     int id;
     Status status;
+    LocalDateTime startTime;
+    Duration duration;
 
-    public Task(String name, String description, Status status) {
+    public Task(String name, String description, Status status, LocalDateTime startTime, Duration duration) {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     public Task(String name, String description) {
@@ -62,5 +68,21 @@ public class Task {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public boolean intersectionOfTwoTasks(Task task) {
+        return this.getStartTime().isBefore(task.getEndTime()) && this.getEndTime().isAfter(task.getStartTime());
     }
 }

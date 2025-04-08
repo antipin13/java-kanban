@@ -7,6 +7,9 @@ import tasks.Status;
 import tasks.Task;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,8 +37,9 @@ class FileBackedTaskManagerTest {
 
     @Test
     void addNewTasksInFile() throws IOException {
-        task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
-        Epic epic1 = new Epic("эпик 1", "нужна машина");
+        task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025
+                , Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
+        Epic epic1 = new Epic("Эпик 1", "описание эпика 1");
 
         fileBackedTaskManager.createTask(task1);
         fileBackedTaskManager.createEpic(epic1);
@@ -58,10 +62,12 @@ class FileBackedTaskManagerTest {
 
     @Test
     void updateTaskInFile() {
-        task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
+        task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025
+                , Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
         fileBackedTaskManager.createTask(task1);
 
-        Task updateTask1 = new Task("Сделать уроки", "решить математику", Status.DONE);
+        Task updateTask1 = new Task("Задача 1", "описание 1", Status.DONE, LocalDateTime.of(2025
+                , Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
         updateTask1.setId(task1.getId());
 
         fileBackedTaskManager.updateTask(updateTask1);
@@ -76,5 +82,4 @@ class FileBackedTaskManagerTest {
             e.getMessage();
         }
     }
-
 }
