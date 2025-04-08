@@ -37,8 +37,8 @@ class FileBackedTaskManagerTest {
 
     @Test
     void addNewTasksInFile() throws IOException {
-        task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025
-                , Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
+        task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025,
+                Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
         Epic epic1 = new Epic("Эпик 1", "описание эпика 1");
 
         fileBackedTaskManager.createTask(task1);
@@ -62,12 +62,12 @@ class FileBackedTaskManagerTest {
 
     @Test
     void updateTaskInFile() {
-        task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025
-                , Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
+        task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025,
+                Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
         fileBackedTaskManager.createTask(task1);
 
-        Task updateTask1 = new Task("Задача 1", "описание 1", Status.DONE, LocalDateTime.of(2025
-                , Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
+        Task updateTask1 = new Task("Задача 1", "описание 1", Status.DONE, LocalDateTime.of(2025,
+                Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
         updateTask1.setId(task1.getId());
 
         fileBackedTaskManager.updateTask(updateTask1);

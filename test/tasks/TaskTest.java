@@ -15,12 +15,12 @@ class TaskTest {
 
     @Test
     void intersectionOfTwoTasks() {
-        Task task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025
-                , Month.JANUARY, 1,0,0), Duration.ofMinutes(60));
+        Task task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025,
+                Month.JANUARY, 1,0,0), Duration.ofMinutes(60));
         manager.createTask(task1);
 
-        Task task2 = new Task("Задача 2", "описание 2", Status.NEW, LocalDateTime.of(2024
-                , Month.DECEMBER, 31,23,0), Duration.ofMinutes(120));
+        Task task2 = new Task("Задача 2", "описание 2", Status.NEW, LocalDateTime.of(2024,
+                Month.DECEMBER, 31,23,0), Duration.ofMinutes(120));
         manager.createTask(task2);
 
         assertTrue(task1.intersectionOfTwoTasks(task2), "Задачи не пересекаются по времени");

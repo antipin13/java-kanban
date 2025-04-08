@@ -22,10 +22,10 @@ class InMemoryHistoryManagerTest {
     void beforeEach() {
         manager = Managers.getDefault();
         historyManager = Managers.getDefaultHistory();
-        task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025
-                , Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
-        task2 = new Task("Задача 2", "описание 2", Status.NEW, LocalDateTime.of(2025
-                , Month.JUNE, 16, 15, 0), Duration.ofMinutes(320));
+        task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025,
+                Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
+        task2 = new Task("Задача 2", "описание 2", Status.NEW, LocalDateTime.of(2025,
+                Month.JUNE, 16, 15, 0), Duration.ofMinutes(320));
     }
 
     @Test
@@ -52,8 +52,8 @@ class InMemoryHistoryManagerTest {
     void getHistory() {
         assertTrue(historyManager.getHistory().isEmpty(), "История не пустая");
 
-        Task task3 = new Task("Задача 3", "описание 3", Status.NEW, LocalDateTime.of(2025
-                , Month.JUNE, 13, 15, 0), Duration.ofMinutes(360));
+        Task task3 = new Task("Задача 3", "описание 3", Status.NEW, LocalDateTime.of(2025,
+                Month.JUNE, 13, 15, 0), Duration.ofMinutes(360));
 
         manager.createTask(task1);
         manager.createTask(task2);
@@ -69,8 +69,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void remove() {
-        Task task3 = new Task("Задача 3", "описание 3", Status.NEW, LocalDateTime.of(2025
-                , Month.JUNE, 13, 15, 0), Duration.ofMinutes(360));
+        Task task3 = new Task("Задача 3", "описание 3", Status.NEW, LocalDateTime.of(2025,
+                Month.JUNE, 13, 15, 0), Duration.ofMinutes(360));
 
         manager.createTask(task1);
         historyManager.add(task1);
