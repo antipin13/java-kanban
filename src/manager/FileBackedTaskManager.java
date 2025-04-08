@@ -82,20 +82,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public String toString(Task task) {
         if (task instanceof Subtask) {
             Subtask subtask = (Subtask) task;
-            String template = String.format("%d,%s,%s,%s,%s,%s,%tF %tT,%02d\n", subtask.getId(), KindOfTask.SUBTASK
-                    , subtask.getName(), subtask.getStatus(), subtask.getDescription(), subtask.getEpicId()
-                    , subtask.getStartTime(), subtask.getStartTime(), subtask.getDuration().toMinutes());
+            String template = String.format("%d,%s,%s,%s,%s,%s,%tF %tT,%02d\n", subtask.getId(), KindOfTask.SUBTASK,
+                    subtask.getName(), subtask.getStatus(), subtask.getDescription(), subtask.getEpicId(),
+                    subtask.getStartTime(), subtask.getStartTime(), subtask.getDuration().toMinutes());
             return template;
         } else if (task instanceof Epic) {
             Epic epic = (Epic) task;
-            String template = String.format("%d,%s,%s,%s,%s,%tF %tT,%02d\n", epic.getId(), KindOfTask.EPIC
-                    , epic.getName(), epic.getStatus(), epic.getDescription(), epic.getStartTime(), epic.getStartTime()
-                    , epic.getDuration().toMinutes());
+            String template = String.format("%d,%s,%s,%s,%s,%tF %tT,%02d\n", epic.getId(), KindOfTask.EPIC,
+                    epic.getName(), epic.getStatus(), epic.getDescription(), epic.getStartTime(), epic.getStartTime(),
+                    epic.getDuration().toMinutes());
             return template;
         } else {
-            String template = String.format("%d,%s,%s,%s,%s,%tF %tT,%02d\n", task.getId(), KindOfTask.TASK
-                    , task.getName(), task.getStatus(), task.getDescription(), task.getStartTime(), task.getStartTime()
-                    , task.getDuration().toMinutes());
+            String template = String.format("%d,%s,%s,%s,%s,%tF %tT,%02d\n", task.getId(), KindOfTask.TASK,
+                    task.getName(), task.getStatus(), task.getDescription(), task.getStartTime(), task.getStartTime(),
+                    task.getDuration().toMinutes());
             return template;
         }
 
@@ -107,15 +107,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (KindOfTask.TASK.name().equals(split[1])) {
-            Task task = new Task(split[2], split[4], Status.valueOf(split[3]), LocalDateTime.parse(split[5], formatter)
-                    , Duration.parse("PT" + split[6] + "M"));
+            Task task = new Task(split[2], split[4], Status.valueOf(split[3]), LocalDateTime.parse(split[5], formatter),
+                    Duration.parse("PT" + split[6] + "M"));
             task.setId(Integer.parseInt(split[0]));
             tasks.put(task.getId(), task);
 
             return task;
         } else if (KindOfTask.SUBTASK.name().equals(split[1])) {
-            Subtask subtask = new Subtask(split[2], split[4], Status.valueOf(split[3])
-                    , LocalDateTime.parse(split[6], formatter), Duration.parse("PT" + split[7] + "M"));
+            Subtask subtask = new Subtask(split[2], split[4], Status.valueOf(split[3]), LocalDateTime.parse(split[6],
+                    formatter), Duration.parse("PT" + split[7] + "M"));
             subtask.setId(Integer.parseInt(split[0]));
             subtasks.put(subtask.getId(), subtask);
 
