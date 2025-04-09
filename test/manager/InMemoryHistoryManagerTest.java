@@ -4,6 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Status;
 import tasks.Task;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,8 +22,10 @@ class InMemoryHistoryManagerTest {
     void beforeEach() {
         manager = Managers.getDefault();
         historyManager = Managers.getDefaultHistory();
-        task1 = new Task("Сделать уроки", "решить математику", Status.NEW);
-        task2 = new Task("убраться в комнате", "протереть пыль", Status.NEW);
+        task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025,
+                Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
+        task2 = new Task("Задача 2", "описание 2", Status.NEW, LocalDateTime.of(2025,
+                Month.JUNE, 16, 15, 0), Duration.ofMinutes(320));
     }
 
     @Test
@@ -46,7 +52,8 @@ class InMemoryHistoryManagerTest {
     void getHistory() {
         assertTrue(historyManager.getHistory().isEmpty(), "История не пустая");
 
-        Task task3 = new Task("Сделать уроки", "решить математику", Status.DONE);
+        Task task3 = new Task("Задача 3", "описание 3", Status.NEW, LocalDateTime.of(2025,
+                Month.JUNE, 13, 15, 0), Duration.ofMinutes(360));
 
         manager.createTask(task1);
         manager.createTask(task2);
@@ -62,7 +69,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void remove() {
-        Task task3 = new Task("Сделать уроки", "решить математику", Status.DONE);
+        Task task3 = new Task("Задача 3", "описание 3", Status.NEW, LocalDateTime.of(2025,
+                Month.JUNE, 13, 15, 0), Duration.ofMinutes(360));
 
         manager.createTask(task1);
         historyManager.add(task1);
@@ -72,14 +80,20 @@ class InMemoryHistoryManagerTest {
 
         manager.createTask(task3);
         historyManager.add(task3);
+        historyManager.add(task3);
 
         List<Task> history = historyManager.getHistory();
-        assertEquals(3, history.size(), "В истории не 3 задачи");
+        assertEquals(3, history.size(), "Задача 3 не переписалась в истории");
 
         historyManager.remove(task2.getId());
         history = historyManager.getHistory();
 
-        assertEquals(2, history.size(), "Задача с ID 2 не удалена");
+        assertEquals(2, history.size(), "Задача с ID 2 не удалена из середины");
         assertFalse(history.contains(task2), "Удалена задача с ID не равным 2");
+
+        historyManager.remove(history.get(history.size() - 1).getId());
+        history = historyManager.getHistory();
+
+        assertEquals(1, history.size(), "Задача не удалена с конца");
     }
 }

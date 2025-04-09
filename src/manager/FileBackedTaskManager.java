@@ -8,6 +8,9 @@ import tasks.Task;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -20,7 +23,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public void save() {
         try (FileWriter fileWriter = new FileWriter(taskFile, StandardCharsets.UTF_8, false)) {
-            fileWriter.write("id,type,name,status,description,epic\n");
+            fileWriter.write("id,type,name,status,description,epic, startTime, duration\n");
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при сохранении задач в менеджер");
         }
@@ -50,7 +53,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             while (bufferedReader.ready()) {
                 String line = bufferedReader.readLine();
-                System.out.println(fileBackedTaskManager.fromString(line));
+                fileBackedTaskManager.fromString(line);
             }
         } catch (FileNotFoundException e) {
             e.getMessage();
@@ -79,17 +82,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public String toString(Task task) {
         if (task instanceof Subtask) {
             Subtask subtask = (Subtask) task;
-            String template = String.format("%d,%s,%s,%s,%s,%s\n", subtask.getId(), KindOfTask.SUBTASK, subtask.getName(),
-                    subtask.getStatus(), subtask.getDescription(), subtask.getEpicId());
+            String template = String.format("%d,%s,%s,%s,%s,%s,%tF %tT,%02d\n", subtask.getId(), KindOfTask.SUBTASK,
+                    subtask.getName(), subtask.getStatus(), subtask.getDescription(), subtask.getEpicId(),
+                    subtask.getStartTime(), subtask.getStartTime(), subtask.getDuration().toMinutes());
             return template;
         } else if (task instanceof Epic) {
             Epic epic = (Epic) task;
-            String template = String.format("%d,%s,%s,%s,%s\n", epic.getId(), KindOfTask.EPIC, epic.getName(),
-                    epic.getStatus(), epic.getDescription());
+            String template = String.format("%d,%s,%s,%s,%s,%tF %tT,%02d\n", epic.getId(), KindOfTask.EPIC,
+                    epic.getName(), epic.getStatus(), epic.getDescription(), epic.getStartTime(), epic.getStartTime(),
+                    epic.getDuration().toMinutes());
             return template;
         } else {
-            String template = String.format("%d,%s,%s,%s,%s\n", task.getId(), KindOfTask.TASK, task.getName(),
-                    task.getStatus(), task.getDescription());
+            String template = String.format("%d,%s,%s,%s,%s,%tF %tT,%02d\n", task.getId(), KindOfTask.TASK,
+                    task.getName(), task.getStatus(), task.getDescription(), task.getStartTime(), task.getStartTime(),
+                    task.getDuration().toMinutes());
             return template;
         }
 
@@ -98,14 +104,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public Task fromString(String value) {
         String[] split = value.split(",");
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         if (KindOfTask.TASK.name().equals(split[1])) {
-            Task task = new Task(split[2], split[4], Status.valueOf(split[3]));
+            Task task = new Task(split[2], split[4], Status.valueOf(split[3]), LocalDateTime.parse(split[5], formatter),
+                    Duration.parse("PT" + split[6] + "M"));
             task.setId(Integer.parseInt(split[0]));
             tasks.put(task.getId(), task);
 
             return task;
         } else if (KindOfTask.SUBTASK.name().equals(split[1])) {
-            Subtask subtask = new Subtask(split[2], split[4], Status.valueOf(split[3]));
+            Subtask subtask = new Subtask(split[2], split[4], Status.valueOf(split[3]), LocalDateTime.parse(split[6],
+                    formatter), Duration.parse("PT" + split[7] + "M"));
             subtask.setId(Integer.parseInt(split[0]));
             subtasks.put(subtask.getId(), subtask);
 
@@ -179,5 +189,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static void main(String[] args) throws IOException {
         File file = new File("C:\\Users\\mihail\\IdeaProjects\\java-kanban\\src\\Tasksfile.csv");
         FileBackedTaskManager newFileBackedTaskManager = FileBackedTaskManager.loadFromFile(file);
+
+        Task task = newFileBackedTaskManager.tasks.get(1);
+        System.out.println(task.getStartTime());
+        System.out.println(task.getDuration());
+        System.out.println(task.getEndTime());
     }
 }

@@ -5,6 +5,7 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.HashMap;
+import java.util.TreeSet;
 
 public interface TaskManager {
     HashMap<Integer, Task> getTasks();
@@ -42,4 +43,8 @@ public interface TaskManager {
     void deleteSubtask(int idOfSubtask);
 
     void deleteEpic(int idOfEpic);
+
+    TreeSet<Task> getPrioritizedTasks();
+
+    boolean intersectionAnyTasks(Task task);
 }
