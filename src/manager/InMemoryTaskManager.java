@@ -5,6 +5,7 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -86,10 +87,17 @@ public class InMemoryTaskManager implements TaskManager {
         return epics.get(idOfEpic);
     }
 
+    Predicate<Task> isIntersectionTask = task -> {
+        boolean intersects = intersectionAnyTasks(task);
+        if (intersects) {
+            System.out.println("Задача пересекается по времени с существующей");
+        }
+        return intersects;
+    };
+
     @Override
     public void createTask(Task task) {
-        if (intersectionAnyTasks(task)) {
-            System.out.println("Задача пересекается по времени с существующей");
+        if(isIntersectionTask.test(task)) {
             return;
         }
         id = id + 1;
@@ -100,8 +108,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createSubtask(Subtask subtask) {
-        if (intersectionAnyTasks(subtask)) {
-            System.out.println("Подзадача пересекается по времени с существующей");
+        if (isIntersectionTask.test(subtask)) {
             return;
         }
         id = id + 1;
@@ -120,8 +127,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
-        if (intersectionAnyTasks(task)) {
-            System.out.println("Задача пересекается по времени с существующей");
+        if (isIntersectionTask.test(task)) {
             return;
         }
         tasks.put(task.getId(), task);
@@ -129,8 +135,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubtask(Subtask subtask) {
-        if (intersectionAnyTasks(subtask)) {
-            System.out.println("Подзадача пересекается по времени с существующей");
+        if (isIntersectionTask.test(subtask)) {
             return;
         }
         Subtask existingSubtask = subtasks.get(subtask.getId());
@@ -191,7 +196,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public TreeSet<Task> getPrioritizedTasks() {
-        if (tasks.isEmpty() || subtasks.isEmpty()) {
+        if (tasks.isEmpty() && subtasks.isEmpty()) {
             return null;
         }
         TreeSet<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));

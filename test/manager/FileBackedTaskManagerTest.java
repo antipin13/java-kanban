@@ -13,7 +13,7 @@ import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     private FileBackedTaskManager fileBackedTaskManager;
     private File tmpFile;
     private Task task1;

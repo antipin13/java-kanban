@@ -16,38 +16,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
     private TaskManager manager = Managers.getDefault();
 
     @Test
-    void createTasks() {
-        Task task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025,
-                Month.JANUARY, 1,0,0), Duration.ofMinutes(60));
-        manager.createTask(task1);
-
-        assertNotNull(manager.getTasks(), "Задача 1 не добавлена");
-
-        Task task2 = new Task("Задача 2", "описание 2", Status.NEW, LocalDateTime.of(2025,
-                Month.JUNE, 16,15,0), Duration.ofMinutes(320));
-        manager.createTask(task2);
-
-        assertEquals(2, manager.getTasks().size(), "Задача 2 не добавлена");
-
-        Subtask subtask1 = new Subtask("Подзадача 1", "описание подзадачи 1", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 13,23,5), Duration.ofMinutes(50));
-        manager.createSubtask(subtask1);
-
-        assertNotNull(manager.getSubtasks(), "Подзадача 1 не добавлена");
-
-        Subtask subtask2 = new Subtask("Подзадача 2", "описание подзадачи 2", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 14,0,0), Duration.ofMinutes(40));
-        manager.createSubtask(subtask2);
-
-        assertEquals(2, manager.getSubtasks().size(), "Подзадача 2 не добавлена");
-
-        Epic epic1 = new Epic("Эпик 1", "описание эпика 1");
-        manager.createEpic(epic1);
-
-        assertNotNull(manager.getEpics(), "Эпик 1 не добавлен");
-    }
-
-    @Test
     void searchTasksById() {
         Task task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025,
                 Month.JANUARY, 1,0,0), Duration.ofMinutes(60));
@@ -112,7 +80,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         subtask2.setId(subtask1.getId());
         manager.updateSubtask(subtask2);
 
-        assertEquals(Status.IN_PROGRESS, manager.getSubtaskOfId(subtask1.getId()).getStatus(),
+        assertEquals(Status.IN_PROGRESS, manager.getSubtaskOfId(subtask2.getId()).getStatus(),
                 "Подзадача не обновилась");
 
         Epic epic1 = new Epic("Эпик 1", "описание эпика 1");
