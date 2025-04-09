@@ -97,7 +97,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createTask(Task task) {
-        if(isIntersectionTask.test(task)) {
+        if (isIntersectionTask.test(task)) {
             return;
         }
         id = id + 1;
