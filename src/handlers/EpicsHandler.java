@@ -68,11 +68,11 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
             return;
         }
         try {
-            int EpicId = Integer.parseInt(pathParts[2]);
+            int epicId = Integer.parseInt(pathParts[2]);
 
-            Epic epic = taskManager.getEpicOfId(EpicId);
+            Epic epic = taskManager.getEpicOfId(epicId);
             if (epic == null) {
-                sendNotFound(exchange, "Эпик с ID " + EpicId + " не найден");
+                sendNotFound(exchange, "Эпик с ID " + epicId + " не найден");
                 return;
             }
 
