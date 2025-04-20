@@ -102,7 +102,7 @@ class SubtasksHandlerTest {
         String taskJson = gson.toJson(subtask2);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/subtasks/1");
+        URI url = URI.create("http://localhost:8080/subtasks/" + subtask2.getId());
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
                 .POST(HttpRequest.BodyPublishers.ofString(taskJson))
