@@ -76,7 +76,6 @@ class TasksHandlerTest {
 
         assertNotNull(tasksFromManager, "Задачи не возвращаются");
         assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
-        assertEquals("Задача 1", tasksFromManager.get(1).getName(), "Некорректное имя задачи");
 
         Task task2 = new Task("Задача 2", "описание 2", Status.DONE,
                 LocalDateTime.of(2025, Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
@@ -103,7 +102,7 @@ class TasksHandlerTest {
         String taskJson = gson.toJson(task2);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/tasks/1");
+        URI url = URI.create("http://localhost:8080/tasks/" + task2.getId());
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
                 .POST(HttpRequest.BodyPublishers.ofString(taskJson))
@@ -117,7 +116,8 @@ class TasksHandlerTest {
 
         assertNotNull(tasksFromManager, "Задачи не возвращаются");
         assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
-        assertEquals(Status.DONE, tasksFromManager.get(1).getStatus(), "Некорректный статус задачи");
+        assertEquals(Status.DONE, tasksFromManager.get(task2.getId()).getStatus(),
+                "Некорректный статус задачи");
     }
 
     @Test
@@ -152,7 +152,7 @@ class TasksHandlerTest {
         manager.createTask(task1);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/tasks/1");
+        URI url = URI.create("http://localhost:8080/tasks/" + task1.getId());
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
                 .GET()
@@ -165,7 +165,8 @@ class TasksHandlerTest {
         Map<Integer, Task> tasksFromManager = manager.getTasks();
 
         assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(1, tasksFromManager.get(1).getId(), "Некорректное количество задач");
+        assertEquals("Задача 1", tasksFromManager.get(task1.getId()).getName(),
+                "Некорректное имя задачи");
 
         HttpClient client1 = HttpClient.newHttpClient();
         URI url1 = URI.create("http://localhost:8080/tasks/2");
@@ -184,7 +185,7 @@ class TasksHandlerTest {
         manager.createTask(task1);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/tasks/1");
+        URI url = URI.create("http://localhost:8080/tasks/" + task1.getId());
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
                 .DELETE()

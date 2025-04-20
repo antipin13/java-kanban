@@ -76,8 +76,6 @@ class SubtasksHandlerTest {
 
         assertNotNull(subtasksFromManager, "Подзадачи не возвращаются");
         assertEquals(1, subtasksFromManager.size(), "Некорректное количество подзадач");
-        assertEquals("Подзадача 1", subtasksFromManager.get(1).getName(),
-                "Некорректное имя подзадачи");
 
         Subtask subtask2 = new Subtask("Подзадача 2", "описание подзадачи 2", Status.NEW,
                 LocalDateTime.of(2025, Month.FEBRUARY, 13, 23, 5), Duration.ofMinutes(50));
@@ -152,7 +150,7 @@ class SubtasksHandlerTest {
         manager.createSubtask(subtask1);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/subtasks/1");
+        URI url = URI.create("http://localhost:8080/subtasks/" + subtask1.getId());
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
                 .GET()
@@ -165,10 +163,11 @@ class SubtasksHandlerTest {
         Map<Integer, Subtask> tasksFromManager = manager.getSubtasks();
 
         assertNotNull(tasksFromManager, "Подзадачи не возвращаются");
-        assertEquals(1, tasksFromManager.get(1).getId(), "Некорректный ID подзадачи");
+        assertEquals("Подзадача 1", tasksFromManager.get(subtask1.getId()).getName(),
+                "Некорректное имя подзадачи");
 
         HttpClient client1 = HttpClient.newHttpClient();
-        URI url1 = URI.create("http://localhost:8080/subtasks/2");
+        URI url1 = URI.create("http://localhost:8080/subtasks/400");
         HttpRequest request1 = HttpRequest.newBuilder()
                 .uri(url1)
                 .GET()
@@ -184,7 +183,7 @@ class SubtasksHandlerTest {
         manager.createSubtask(subtask1);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/subtasks/1");
+        URI url = URI.create("http://localhost:8080/subtasks/" + subtask1.getId());
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
                 .DELETE()

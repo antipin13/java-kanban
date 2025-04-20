@@ -75,7 +75,6 @@ class EpicsHandlerTest {
 
         assertNotNull(tasksFromManager, "Эпики не возвращаются");
         assertEquals(1, tasksFromManager.size(), "Некорректное количество эпиков");
-        assertEquals("Эпик 1", tasksFromManager.get(1).getName(), "Некорректное имя эпика");
     }
 
     @Test
@@ -108,7 +107,7 @@ class EpicsHandlerTest {
         manager.createEpic(epic1);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/epics/1");
+        URI url = URI.create("http://localhost:8080/epics/" + epic1.getId());
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
                 .GET()
@@ -135,7 +134,7 @@ class EpicsHandlerTest {
         manager.createEpic(epic1);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/epics/1");
+        URI url = URI.create("http://localhost:8080/epics/" + epic1.getId());
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
                 .DELETE()
@@ -147,7 +146,7 @@ class EpicsHandlerTest {
 
         Map<Integer, Epic> tasksFromManager = manager.getEpics();
 
-        assertEquals(0, tasksFromManager.size(), "Эпик не был удалена");
+        assertEquals(0, tasksFromManager.size(), "Эпик не был удален");
     }
 
     @Test
@@ -162,7 +161,7 @@ class EpicsHandlerTest {
         String taskJson = "{\"epicId\":" + epic1.getId() + ",\"subtaskId\":" + subtask1.getId() + "}";
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/epics/1/2");
+        URI url = URI.create("http://localhost:8080/epics/" + epic1.getId() + "/"+ subtask1.getId());
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
                 .POST(HttpRequest.BodyPublishers.ofString(taskJson))

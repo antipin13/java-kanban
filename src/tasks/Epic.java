@@ -61,13 +61,15 @@ public class Epic extends Task {
     }
 
     public Duration getDuration() {
-        if (epic == null) {
-            return null;
+        if (epic == null || epic.isEmpty()) {
+            return Duration.ZERO;
         }
-        duration = epic.values().stream()
+
+        this.duration = epic.values().stream()
                 .map(Subtask::getDuration)
                 .reduce(Duration.ZERO, Duration::plus);
-        return duration;
+
+        return this.duration;
     }
 
     @Override
