@@ -1,11 +1,12 @@
 package tasks;
 
-import manager.KindOfTask;
-
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class Epic extends Task {
     HashMap<Integer, Subtask> epic;
+    LocalDateTime endTime;
 
     public Epic(String name, String description) {
         super(name, description);
@@ -52,9 +53,24 @@ public class Epic extends Task {
         subtask.setEpicId(epic.getId());
     }
 
-    public String toString(Epic epic) {
-        String template = String.format("%d,%s,%s,%s,%s,%s", epic.getId(), KindOfTask.EPIC, epic.getName(),
-                epic.getStatus(), epic.getDescription());
-        return template;
+    public LocalDateTime getStartTime() {
+        startTime = epic.values().stream()
+                .map(Subtask::getStartTime)
+                .min(LocalDateTime::compareTo)
+                .orElse(null);
+
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        duration = epic.values().stream()
+                .map(Subtask::getDuration)
+                .reduce(Duration.ZERO, Duration::plus);
+        return duration;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
     }
 }

@@ -4,7 +4,9 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
-import java.util.HashMap;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class InMemoryTaskManager implements TaskManager {
     private HistoryManager historyManager;
@@ -85,8 +87,19 @@ public class InMemoryTaskManager implements TaskManager {
         return epics.get(idOfEpic);
     }
 
+    Predicate<Task> isIntersectionTask = task -> {
+        boolean intersects = intersectionAnyTasks(task);
+        if (intersects) {
+            System.out.println("Задача пересекается по времени с существующей");
+        }
+        return intersects;
+    };
+
     @Override
     public void createTask(Task task) {
+        if (isIntersectionTask.test(task)) {
+            return;
+        }
         id = id + 1;
         task.setId(id);
         tasks.put(task.getId(), task);
@@ -95,6 +108,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createSubtask(Subtask subtask) {
+        if (isIntersectionTask.test(subtask)) {
+            return;
+        }
         id = id + 1;
         subtask.setId(id);
         subtasks.put(subtask.getId(), subtask);
@@ -111,11 +127,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
+        if (isIntersectionTask.test(task)) {
+            return;
+        }
         tasks.put(task.getId(), task);
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
+        if (isIntersectionTask.test(subtask)) {
+            return;
+        }
         Subtask existingSubtask = subtasks.get(subtask.getId());
         if (existingSubtask != null) {
             existingSubtask.setName(subtask.getName());
@@ -170,6 +192,30 @@ public class InMemoryTaskManager implements TaskManager {
         }
         epics.remove(idForDelete);
         historyManager.remove(idForDelete);
+    }
+
+    @Override
+    public TreeSet<Task> getPrioritizedTasks() {
+        if (tasks.isEmpty() && subtasks.isEmpty()) {
+            return null;
+        }
+        TreeSet<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+
+        Stream.concat(tasks.values().stream().filter(task -> task.getStartTime() != null),
+                        subtasks.values().stream().filter(subtask -> subtask.getStartTime() != null))
+                .forEach(prioritizedTasks::add);
+
+        return prioritizedTasks;
+    }
+
+    @Override
+    public boolean intersectionAnyTasks(Task task) {
+        if (getPrioritizedTasks() == null) {
+            return false;
+        }
+        return getPrioritizedTasks().stream()
+                .filter(task1 -> !task.equals(task1))
+                .anyMatch(task1 -> task.intersectionOfTwoTasks(task1));
     }
 }
 
