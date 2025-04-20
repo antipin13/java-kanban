@@ -116,7 +116,8 @@ class SubtasksHandlerTest {
 
         assertNotNull(subtasksFromManager, "Подзадачи не возвращаются");
         assertEquals(1, subtasksFromManager.size(), "Некорректное количество подзадач");
-        assertEquals(Status.DONE, subtasksFromManager.get(1).getStatus(), "Некорректный статус подзадачи");
+        assertEquals(Status.DONE, subtasksFromManager.get(subtask2.getId()).getStatus(),
+                "Некорректный статус подзадачи");
     }
 
     @Test
