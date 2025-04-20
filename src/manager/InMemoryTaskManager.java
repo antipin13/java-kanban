@@ -64,6 +64,7 @@ public class InMemoryTaskManager implements TaskManager {
                 System.out.println(tasks.get(idOfTask).getName());
             }
         }
+        historyManager.add(tasks.get(idOfTask));
         return tasks.get(idOfTask);
     }
 
@@ -74,6 +75,7 @@ public class InMemoryTaskManager implements TaskManager {
                 System.out.println(subtasks.get(idOfSubtask).getName());
             }
         }
+        historyManager.add(subtasks.get(idOfSubtask));
         return subtasks.get(idOfSubtask);
     }
 
@@ -84,6 +86,7 @@ public class InMemoryTaskManager implements TaskManager {
                 System.out.println(epics.get(idOfEpic).getName());
             }
         }
+        historyManager.add(epics.get(idOfEpic));
         return epics.get(idOfEpic);
     }
 
@@ -103,6 +106,7 @@ public class InMemoryTaskManager implements TaskManager {
         id = id + 1;
         task.setId(id);
         tasks.put(task.getId(), task);
+        historyManager.add(task);
         System.out.printf("Создана задача - %s с идентификатором: %d%n", task.getName(), id);
     }
 
@@ -114,6 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
         id = id + 1;
         subtask.setId(id);
         subtasks.put(subtask.getId(), subtask);
+        historyManager.add(subtask);
         System.out.printf("Создана задача - %s с идентификатором: %d%n", subtask.getName(), id);
     }
 
@@ -122,6 +127,8 @@ public class InMemoryTaskManager implements TaskManager {
         id = id + 1;
         epic.setId(id);
         epics.put(epic.getId(), epic);
+        updateEpic(epic);
+        historyManager.add(epic);
         System.out.printf("Создана задача - %s с идентификатором: %d%n", epic.getName(), id);
     }
 
@@ -131,6 +138,7 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
         tasks.put(task.getId(), task);
+        historyManager.add(task);
     }
 
     @Override
@@ -144,10 +152,20 @@ public class InMemoryTaskManager implements TaskManager {
             existingSubtask.setDescription(subtask.getDescription());
             existingSubtask.setStatus(subtask.getStatus());
         }
+        try {
+            updateEpic(epics.get(subtask.getEpicId()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        historyManager.add(subtask);
     }
 
     @Override
     public void updateEpic(Epic epic) {
+        epics.get(epic.getId()).getStatus();
+        epics.get(epic.getId()).getStartTime();
+        epics.get(epic.getId()).getDuration();
+        epics.get(epic.getId()).getEndTime();
         epics.put(epic.getId(), epic);
     }
 
@@ -175,6 +193,11 @@ public class InMemoryTaskManager implements TaskManager {
         }
         subtasks.remove(idForDelete);
         historyManager.remove(idForDelete);
+        try {
+            updateEpic(epics.get(subtasks.get(idOfSubtask).getEpicId()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
@@ -216,6 +239,18 @@ public class InMemoryTaskManager implements TaskManager {
         return getPrioritizedTasks().stream()
                 .filter(task1 -> !task.equals(task1))
                 .anyMatch(task1 -> task.intersectionOfTwoTasks(task1));
+    }
+
+    @Override
+    public void addSubtaskInEpic(Epic epic, Subtask subtask) {
+        epics.get(epic.getId()).getEpic().put(subtask.getId(), subtask);
+        subtask.setEpicId(epic.getId());
+        updateEpic(epic);
+    }
+
+    @Override
+    public HistoryManager getHistoryManager() {
+        return historyManager;
     }
 }
 
