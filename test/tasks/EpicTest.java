@@ -22,7 +22,7 @@ class EpicTest {
 
         Epic epic1 = new Epic("Эпик 1", "описание эпика 1");
         manager.createEpic(epic1);
-        epic1.addSubtaskInEpic(epic1, subtask1);
+        manager.addSubtaskInEpic(epic1, subtask1);
 
         assertEquals(1, epic1.getEpic().size(), "Подзадача не добавлена");
     }
@@ -35,14 +35,14 @@ class EpicTest {
         manager.createSubtask(subtask1);
 
         Subtask subtask2 = new Subtask("Подзадача 2", "описание подзадачи 2", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 14,0,0), Duration.ofMinutes(40));
+                LocalDateTime.of(2025, Month.FEBRUARY, 14, 0, 0), Duration.ofMinutes(40));
         manager.createSubtask(subtask2);
 
         Epic epic1 = new Epic("Эпик 1", "описание эпика 1");
         manager.createEpic(epic1);
 
-        epic1.addSubtaskInEpic(epic1, subtask1);
-        epic1.addSubtaskInEpic(epic1, subtask2);
+        manager.addSubtaskInEpic(epic1, subtask1);
+        manager.addSubtaskInEpic(epic1, subtask2);
 
         assertEquals(Status.NEW, epic1.getStatus(), "Статус должен быть NEW");
 
@@ -55,7 +55,7 @@ class EpicTest {
         assertEquals(Status.IN_PROGRESS, epic1.getStatus(), "Статус должен быть IN_PROGRESS");
 
         Subtask subtask4 = new Subtask("Подзадача 2", "описание подзадачи 2", Status.DONE,
-                LocalDateTime.of(2025, Month.FEBRUARY, 14,0,0), Duration.ofMinutes(40));
+                LocalDateTime.of(2025, Month.FEBRUARY, 14, 0, 0), Duration.ofMinutes(40));
         subtask4.setId(subtask2.getId());
         manager.updateSubtask(subtask4);
 
@@ -68,7 +68,7 @@ class EpicTest {
         manager.updateSubtask(subtask5);
 
         Subtask subtask6 = new Subtask("Подзадача 2", "описание подзадачи 2", Status.DONE,
-                LocalDateTime.of(2025, Month.FEBRUARY, 14,0,0), Duration.ofMinutes(40));
+                LocalDateTime.of(2025, Month.FEBRUARY, 14, 0, 0), Duration.ofMinutes(40));
         subtask6.setId(subtask2.getId());
         manager.updateSubtask(subtask6);
 

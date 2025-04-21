@@ -1,0 +1,22 @@
+package handlers;
+
+public enum Endpoint {
+    GET_TASKS,
+    GET_TASK_ID,
+    GET_SUBTASKS,
+    GET_SUBTASK_ID,
+    GET_EPICS,
+    GET_EPIC_ID,
+    GET_HISTORY,
+    GET_PRIORITIZED_TASKS,
+    POST_TASKS,
+    POST_SUBTASKS,
+    POST_EPICS,
+    POST_TASK_ID,
+    POST_SUBTASKS_ID,
+    POST_EPIC_SUBTASK,
+    DELETE_TASK,
+    DELETE_SUBTASK,
+    DELETE_EPIC,
+    UNKNOWN;
+}
