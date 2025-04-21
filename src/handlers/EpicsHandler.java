@@ -42,7 +42,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
                 handleAddSubtaskInEpic(exchange);
                 break;
             default:
-                sendNotFound(exchange, "Такого эндпоинта не существует");
+                sendNotFound(exchange, "Некорректный эндпоинт");
         }
     }
 
@@ -72,7 +72,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 
             Epic epic = taskManager.getEpicOfId(epicId);
             if (epic == null) {
-                sendNotFound(exchange, "Эпик с ID " + epicId + " не найден");
+                sendNotFound(exchange, String.format("Эпик с ID %d не найден", epicId));
                 return;
             }
 
@@ -152,9 +152,9 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 
             taskManager.addSubtaskInEpic(epic, subtask);
 
-            sendText(exchange, "Подзадача " + subtaskId + " добавлена в эпик " + epicId);
+            sendText(exchange, String.format("Подзадача %d добавлена в эпик %d", subtaskId, epicId));
         } catch (Exception e) {
-            sendInternalServerError(exchange, "Error adding subtask to epic: " + e.getMessage());
+            sendInternalServerError(exchange, "Ошибка при добавлении подзадачи в эпик: " + e.getMessage());
         }
     }
 
@@ -173,11 +173,11 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 
         Epic epic = taskManager.getEpicOfId(epicId);
         if (epic == null) {
-            sendNotFound(exchange, "Эпик с ID " + epicId + " не найден");
+            sendNotFound(exchange, String.format("Эпик с ID %d не найден", epicId));
             return;
         }
 
         taskManager.deleteEpic(epicId);
-        sendText(exchange, "Эпик с ID " + epicId + " удален");
+        sendText(exchange, String.format("Эпик с ID %d удален", epicId));
     }
 }

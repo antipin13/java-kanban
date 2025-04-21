@@ -38,7 +38,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
             case DELETE_TASK:
                 handleDeleteTask(exchange);
             default:
-                sendNotFound(exchange, "Такого эндпоинта не существует");
+                sendNotFound(exchange, "Некорректный эндпоинт");
         }
 
     }
@@ -69,7 +69,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
 
             Task task = taskManager.getTaskOfId(taskId);
             if (task == null) {
-                sendNotFound(exchange, "Задача с ID " + taskId + " не найдена");
+                sendNotFound(exchange, String.format("Задача с ID %d не найдена", taskId));
                 return;
             }
 
@@ -144,7 +144,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
 
             Task task = taskManager.getTaskOfId(taskId);
             if (task == null) {
-                sendNotFound(exchange, "Задача с ID " + taskId + " не найдена");
+                sendNotFound(exchange, String.format("Задача с ID %d не найдена", taskId));
                 return;
             }
 
@@ -189,11 +189,11 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
 
         Task task = taskManager.getTaskOfId(taskId);
         if (task == null) {
-            sendNotFound(exchange, "Задача с ID " + taskId + " не найдена");
+            sendNotFound(exchange, String.format("Задача с ID %d не найдена", taskId));
             return;
         }
 
         taskManager.deleteTask(taskId);
-        sendText(exchange, "Задача с ID " + taskId + " удалена");
+        sendText(exchange, String.format("Задача с ID %d удалена", taskId));
     }
 }

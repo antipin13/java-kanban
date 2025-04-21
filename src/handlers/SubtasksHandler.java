@@ -38,7 +38,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
             case DELETE_SUBTASK:
                 handleDeleteSubtask(exchange);
             default:
-                sendNotFound(exchange, "Такого эндпоинта не существует");
+                sendNotFound(exchange, "Некорректный эндпоинт");
         }
     }
 
@@ -68,7 +68,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
 
             Subtask subtask = taskManager.getSubtaskOfId(subtaskId);
             if (subtask == null) {
-                sendNotFound(exchange, "Задача с ID " + subtaskId + " не найдена");
+                sendNotFound(exchange, String.format("Подзадача с ID %d не найдена", subtaskId));
                 return;
             }
 
@@ -143,7 +143,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
 
             Subtask subtask = taskManager.getSubtaskOfId(subtaskId);
             if (subtask == null) {
-                sendNotFound(exchange, "Подзадача с ID " + subtaskId + " не найдена");
+                sendNotFound(exchange, String.format("Подзадача с ID %d не найдена", subtaskId));
                 return;
             }
 
@@ -188,11 +188,11 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
 
         Subtask subtask = taskManager.getSubtaskOfId(subtaskId);
         if (subtask == null) {
-            sendNotFound(exchange, "Подзадача с ID " + subtaskId + " не найдена");
+            sendNotFound(exchange, String.format("Подзадача с ID %d не найдена", subtaskId));
             return;
         }
 
         taskManager.deleteSubtask(subtaskId);
-        sendText(exchange, "Подадача с ID " + subtaskId + " удалена");
+        sendText(exchange, String.format("Подадача с ID %d удалена", subtaskId));
     }
 }

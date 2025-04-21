@@ -158,10 +158,10 @@ class EpicsHandlerTest {
 
         manager.createSubtask(subtask1);
 
-        String taskJson = "{\"epicId\":" + epic1.getId() + ",\"subtaskId\":" + subtask1.getId() + "}";
+        String taskJson = String.format("{\"epicId\":%d,\"subtaskId\":%d}", epic1.getId(), subtask1.getId());
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/epics/" + epic1.getId() + "/"+ subtask1.getId());
+        URI url = URI.create(String.format("http://localhost:8080/epics/%d/%d", epic1.getId(),subtask1.getId()));
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
                 .POST(HttpRequest.BodyPublishers.ofString(taskJson))
