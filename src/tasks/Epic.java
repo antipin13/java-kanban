@@ -6,18 +6,15 @@ import java.util.HashMap;
 
 public class Epic extends Task {
     HashMap<Integer, Subtask> epic;
-    LocalDateTime endTime;
 
     public Epic(String name, String description) {
         super(name, description);
-        epic = new HashMap<>();
     }
 
     @Override
     public Status getStatus() {
-        if (epic.isEmpty()) {
-            status = Status.NEW;
-            return status;
+        if (epic == null || epic.isEmpty()) {
+            return Status.NEW;
         }
 
         boolean allStatusIsNew = true;
@@ -45,15 +42,16 @@ public class Epic extends Task {
     }
 
     public HashMap<Integer, Subtask> getEpic() {
+        if (epic == null) {
+            epic = new HashMap<>();
+        }
         return epic;
     }
 
-    public void addSubtaskInEpic(Epic epic, Subtask subtask) {
-        epic.getEpic().put(subtask.getId(), subtask);
-        subtask.setEpicId(epic.getId());
-    }
-
     public LocalDateTime getStartTime() {
+        if (epic == null) {
+            return null;
+        }
         startTime = epic.values().stream()
                 .map(Subtask::getStartTime)
                 .min(LocalDateTime::compareTo)
@@ -63,14 +61,22 @@ public class Epic extends Task {
     }
 
     public Duration getDuration() {
-        duration = epic.values().stream()
+        if (epic == null || epic.isEmpty()) {
+            return Duration.ZERO;
+        }
+
+        this.duration = epic.values().stream()
                 .map(Subtask::getDuration)
                 .reduce(Duration.ZERO, Duration::plus);
-        return duration;
+
+        return this.duration;
     }
 
     @Override
     public LocalDateTime getEndTime() {
+        if (startTime == null) {
+            return null;
+        }
         return startTime.plus(duration);
     }
 }

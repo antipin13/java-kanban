@@ -18,13 +18,13 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void searchTasksById() {
         Task task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025,
-                Month.JANUARY, 1,0,0), Duration.ofMinutes(60));
+                Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
         manager.createTask(task1);
 
         assertEquals(task1, manager.getTaskOfId(task1.getId()), "Задача 1 не найдена");
 
         Subtask subtask1 = new Subtask("Подзадача 1", "описание подзадачи 1", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 13,23,5), Duration.ofMinutes(50));
+                LocalDateTime.of(2025, Month.FEBRUARY, 13, 23, 5), Duration.ofMinutes(50));
         manager.createSubtask(subtask1);
 
         assertEquals(subtask1, manager.getSubtaskOfId(subtask1.getId()), "Подзадача 1 не найдена");
@@ -38,14 +38,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void immutabilityOfTask() {
         Task task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025,
-                Month.JANUARY, 1,0,0), Duration.ofMinutes(60));
+                Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
         manager.createTask(task1);
 
         Task task2 = manager.getTaskOfId(task1.getId());
         assertEquals(task1, task2, "Задачи не совпадают");
 
         Subtask subtask1 = new Subtask("Подзадача 1", "описание подзадачи 1", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 13,23,5), Duration.ofMinutes(50));
+                LocalDateTime.of(2025, Month.FEBRUARY, 13, 23, 5), Duration.ofMinutes(50));
         manager.createSubtask(subtask1);
 
         Subtask subtask2 = manager.getSubtaskOfId(subtask1.getId());
@@ -61,22 +61,22 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void updateTasks() {
         Task task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025,
-                Month.JANUARY, 1,0,0), Duration.ofMinutes(60));
+                Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
         manager.createTask(task1);
 
         Task task2 = new Task("Задача 1", "описание 1", Status.DONE,
-                LocalDateTime.of(2025, Month.JANUARY, 1,0,0), Duration.ofMinutes(60));
+                LocalDateTime.of(2025, Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
         task2.setId(task1.getId());
         manager.updateTask(task2);
 
         assertEquals(Status.DONE, manager.getTaskOfId(task1.getId()).getStatus(), "Задача 1 не обновилась");
 
         Subtask subtask1 = new Subtask("Подзадача 1", "описание подзадачи 1", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 13,23,5), Duration.ofMinutes(50));
+                LocalDateTime.of(2025, Month.FEBRUARY, 13, 23, 5), Duration.ofMinutes(50));
         manager.createSubtask(subtask1);
 
         Subtask subtask2 = new Subtask("Подзадача 1", "описание подзадачи 1", Status.IN_PROGRESS,
-                LocalDateTime.of(2025, Month.FEBRUARY, 13,23,5), Duration.ofMinutes(50));
+                LocalDateTime.of(2025, Month.FEBRUARY, 13, 23, 5), Duration.ofMinutes(50));
         subtask2.setId(subtask1.getId());
         manager.updateSubtask(subtask2);
 
@@ -97,7 +97,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void deleteTask() {
         Task task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025,
-                Month.JANUARY, 1,0,0), Duration.ofMinutes(60));
+                Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
         manager.createTask(task1);
 
         assertNotNull(manager.getTasks());
@@ -106,7 +106,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(0, manager.getTasks().size());
 
         Subtask subtask1 = new Subtask("Подзадача 1", "описание подзадачи 1", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 13,23,5), Duration.ofMinutes(50));
+                LocalDateTime.of(2025, Month.FEBRUARY, 13, 23, 5), Duration.ofMinutes(50));
         manager.createSubtask(subtask1);
 
         assertNotNull(manager.getSubtasks());
@@ -129,15 +129,15 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.createEpic(epic1);
 
         Subtask subtask1 = new Subtask("Подзадача 1", "описание подзадачи 1", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 13,23,5), Duration.ofMinutes(50));
+                LocalDateTime.of(2025, Month.FEBRUARY, 13, 23, 5), Duration.ofMinutes(50));
         manager.createSubtask(subtask1);
 
         Subtask subtask2 = new Subtask("Подзадача 2", "описание подзадачи 2", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 14,0,0), Duration.ofMinutes(40));
+                LocalDateTime.of(2025, Month.FEBRUARY, 14, 0, 0), Duration.ofMinutes(40));
         manager.createSubtask(subtask2);
 
-        epic1.addSubtaskInEpic(epic1, subtask1);
-        epic1.addSubtaskInEpic(epic1, subtask2);
+        manager.addSubtaskInEpic(epic1, subtask1);
+        manager.addSubtaskInEpic(epic1, subtask2);
 
         assertEquals(2, epic1.getEpic().size(), "Подзадачи не добавлены в эпик");
 
@@ -149,17 +149,17 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void getEndTimeTasks() {
         Task task1 = new Task("Задача 1", "описание 1", Status.NEW, LocalDateTime.of(2025,
-                Month.JANUARY, 1,0,0), Duration.ofMinutes(60));
+                Month.JANUARY, 1, 0, 0), Duration.ofMinutes(60));
         manager.createTask(task1);
 
-        assertEquals(LocalDateTime.of(2025, Month.JANUARY, 1,1,0), task1.getEndTime(),
+        assertEquals(LocalDateTime.of(2025, Month.JANUARY, 1, 1, 0), task1.getEndTime(),
                 "Неккоректное время для задачи 1");
 
         Subtask subtask1 = new Subtask("Подзадача 1", "описание подзадачи 1", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 13,23,5), Duration.ofMinutes(50));
+                LocalDateTime.of(2025, Month.FEBRUARY, 13, 23, 5), Duration.ofMinutes(50));
         manager.createSubtask(subtask1);
 
-        assertEquals(LocalDateTime.of(2025, Month.FEBRUARY, 13,23,55),
+        assertEquals(LocalDateTime.of(2025, Month.FEBRUARY, 13, 23, 55),
                 subtask1.getEndTime(), "Неккоректное время для задачи 1");
     }
 
@@ -169,17 +169,17 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.createEpic(epic1);
 
         Subtask subtask1 = new Subtask("Подзадача 1", "описание подзадачи 1", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 13,23,5), Duration.ofMinutes(50));
+                LocalDateTime.of(2025, Month.FEBRUARY, 13, 23, 5), Duration.ofMinutes(50));
         manager.createSubtask(subtask1);
 
         Subtask subtask2 = new Subtask("Подзадача 2", "описание подзадачи 2", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 14,0,0), Duration.ofMinutes(40));
+                LocalDateTime.of(2025, Month.FEBRUARY, 14, 0, 0), Duration.ofMinutes(40));
         manager.createSubtask(subtask2);
 
-        epic1.addSubtaskInEpic(epic1, subtask1);
-        epic1.addSubtaskInEpic(epic1, subtask2);
+        manager.addSubtaskInEpic(epic1, subtask1);
+        manager.addSubtaskInEpic(epic1, subtask2);
 
-        assertEquals(LocalDateTime.of(2025, Month.FEBRUARY, 13,23,5),
+        assertEquals(LocalDateTime.of(2025, Month.FEBRUARY, 13, 23, 5),
                 epic1.getStartTime(), "Неверное время начала Эпика 1");
     }
 
@@ -189,15 +189,15 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.createEpic(epic1);
 
         Subtask subtask1 = new Subtask("Подзадача 1", "описание подзадачи 1", Status.NEW,
-                LocalDateTime.of(2025, Month.FEBRUARY, 13,23,5), Duration.ofMinutes(50));
+                LocalDateTime.of(2025, Month.FEBRUARY, 13, 23, 5), Duration.ofMinutes(50));
         manager.createSubtask(subtask1);
 
         Subtask subtask2 = new Subtask("Подзадача 2", "описание подзадачи 2", Status.NEW
-                , LocalDateTime.of(2025, Month.FEBRUARY, 14,0,0), Duration.ofMinutes(40));
+                , LocalDateTime.of(2025, Month.FEBRUARY, 14, 0, 0), Duration.ofMinutes(40));
         manager.createSubtask(subtask2);
 
-        epic1.addSubtaskInEpic(epic1, subtask1);
-        epic1.addSubtaskInEpic(epic1, subtask2);
+        manager.addSubtaskInEpic(epic1, subtask1);
+        manager.addSubtaskInEpic(epic1, subtask2);
 
         assertEquals(Duration.ofMinutes(90), epic1.getDuration(), "Неверное время длительности Эпика 1");
     }

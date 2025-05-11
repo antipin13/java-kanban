@@ -47,4 +47,8 @@ public interface TaskManager {
     TreeSet<Task> getPrioritizedTasks();
 
     boolean intersectionAnyTasks(Task task);
+
+    void addSubtaskInEpic(Epic epic, Subtask subtask);
+
+    HistoryManager getHistoryManager();
 }
